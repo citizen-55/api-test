@@ -1,0 +1,409 @@
+{
+  "openapi": "3.1.0",
+  "x-stoplight": {
+    "id": "n82tfu2730cwv"
+  },
+  "info": {
+    "title": "Manage Customer",
+    "version": "1.0",
+    "summary": "Manage Customer Details",
+    "description": "This API is used for getting, adding, updating, and deleting customer details.",
+    "termsOfService": "https://example.com/terms",
+    "contact": {
+      "name": "API Team",
+      "email": "apihelp@somewhere.com",
+      "url": "https://example.com"
+    },
+    "license": {
+      "name": "No licence available",
+      "url": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  },
+
+  "servers": [
+    {
+      "url": "http://localhost"
+    }
+  ],
+  "paths": {
+    "/Customers/{CustomerId}": {
+      "parameters": [
+        {
+          "schema": {
+            "type": "integer"
+          },
+          "name": "CustomerId",
+          "in": "path",
+          "required": true,
+          "description": "Id of an existing Customer."
+        }
+      ],
+      "get": {
+        "summary": "Get Customer Info by Customer ID",
+        "tags": [
+          "Customers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                },
+                "examples": {
+                  "Get Customer Alice Smith": {
+                    "value": {
+                      "id": 142,
+                      "firstName": "Alice",
+                      "lastName": "Smith",
+                      "email": "alice.smith@gmail.com",
+                      "dateOfBirth": "1997-10-31",
+                      "emailVerified": true,
+                      "signUpDate": "2019-08-24"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Customer Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Customer": {
+                      "type": "string",
+                      "x-stoplight": {
+                        "id": "zahpjzkzmetiw"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-Customers-CustomerId",
+        "description": "Retrieve the information of the Customer with the matching Customer ID.",
+        "x-stoplight": {
+          "id": "3i137qp77h3xg"
+        },
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/retailerId"
+          },
+          {
+            "$ref": "#/components/parameters/customerId"
+          },
+          {
+            "$ref": "#/components/parameters/AuthKey"
+          }
+        ]
+      },
+      "patch": {
+        "summary": "Update Customer Details",
+        "operationId": "patch-customer-customer-Id",
+        "responses": {
+          "200": {
+            "description": "Customer Updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                },
+                "examples": {
+                  "Updated Customer Rebecca Baker": {
+                    "value": {
+                      "id": 13,
+                      "firstName": "Rebecca",
+                      "lastName": "Baker",
+                      "email": "rebecca@gmail.com",
+                      "dateOfBirth": "1985-10-02",
+                      "emailVerified": false,
+                      "createDate": "2019-08-24"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Customer Not Found"
+          },
+          "409": {
+            "description": "Email Already Taken"
+          }
+        },
+        "description": "Update the information of an existing Customer.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "If a new email is given, the Customer's email verified property will be set to false."
+                  },
+                  "dateOfBirth": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "Update First Name": {
+                  "value": {
+                    "firstName": "Rebecca"
+                  }
+                },
+                "Update Email": {
+                  "value": {
+                    "email": "rebecca@gmail.com"
+                  }
+                },
+                "Update Last Name & Date of Birth": {
+                  "value": {
+                    "lastName": "Baker",
+                    "dateOfBirth": "1985-10-02"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Patch Customer properties to update."
+        },
+        "x-stoplight": {
+          "id": "vhj8hb4kjdzsw"
+        },
+        "parameters": [
+          {
+            "description": "The authorization key for API access.",
+            "schema": {
+              "type": "string"
+            },
+            "in": "header",
+            "name": "AuthKey"
+          }
+        ]
+      }
+    },
+    "/Customer": {
+      "post": {
+        "summary": "Create New Customer",
+        "operationId": "post-Customer",
+        "responses": {
+          "200": {
+            "description": "Customer Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                },
+                "examples": {
+                  "New Customer Bob Fellow": {
+                    "value": {
+                      "id": 12,
+                      "firstName": "Bob",
+                      "lastName": "Fellow",
+                      "email": "bob.fellow@gmail.com",
+                      "dateOfBirth": "1996-08-24",
+                      "emailVerified": false,
+                      "createDate": "2020-11-18"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing Required Information"
+          },
+          "409": {
+            "description": "Email Already Taken"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "dateOfBirth": {
+                    "type": "string",
+                    "format": "date"
+                  }
+                },
+                "required": [
+                  "firstName",
+                  "lastName",
+                  "email",
+                  "dateOfBirth"
+                ]
+              },
+              "examples": {
+                "Create Customer Bob Fellow": {
+                  "value": {
+                    "firstName": "Bob",
+                    "lastName": "Fellow",
+                    "email": "bob.fellow@gmail.com",
+                    "dateOfBirth": "1996-08-24"
+                  }
+                }
+              }
+            }
+          },
+          "description": "Post the necessary fields for the API to create a new Customer."
+        },
+        "description": "Create a new Customer.",
+        "x-stoplight": {
+          "id": "1pwuq54f3e5ja"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Customer": {
+        "title": "Customer",
+        "type": "object",
+        "examples": [
+          {
+            "id": 142,
+            "firstName": "Alice",
+            "lastName": "Smith",
+            "email": "alice.smith@gmail.com",
+            "dateOfBirth": "1997-10-31",
+            "emailVerified": true,
+            "signUpDate": "2019-08-24"
+          }
+        ],
+        "x-stoplight": {
+          "id": "zf7pwcn183fuf"
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email",
+          "dateOfBirth",
+          "emailVerified"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique identifier for the given Customer.",
+            "x-stoplight": {
+              "id": "oh1fnt3wfrm0b"
+            }
+          },
+          "firstName": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "1gv9s3shxe2u3"
+            },
+            "description": "Customer first name"
+          },
+          "lastName": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "62daoflahmfzu"
+            },
+            "description": "Customer last name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "x-stoplight": {
+              "id": "63w8wqqk3j5ev"
+            },
+            "description": "Customer email address"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "example": "1997-10-31",
+            "x-stoplight": {
+              "id": "amd7s7efvyfhn"
+            },
+            "description": "Customer date of birth"
+          },
+          "emailVerified": {
+            "type": "boolean",
+            "description": "Set to true if the Customer's email has been verified.",
+            "x-stoplight": {
+              "id": "s7ndb94o9smey"
+            }
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date",
+            "description": "The date that the Customer was created.",
+            "x-stoplight": {
+              "id": "4scxqa6mkz3uo"
+            }
+          },
+          "retailerId": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "rkkwfqkagjjti"
+            },
+            "description": "The unique id of the home retailer of the customer. This is the retailer where the customer first registered."
+          }
+        }
+      }
+    },
+    "parameters": {
+      "AuthKey": {
+        "name": "AuthKey",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The unique authorisation key for API access"
+      },
+      "customerId": {
+        "name": "customerId",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The unique Id of the customer"
+      },
+      "retailerId": {
+        "name": "retailerId",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "A unique Id identifying the retailer"
+      }
+    }
+  }
+}
