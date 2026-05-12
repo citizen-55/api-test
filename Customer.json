@@ -1,0 +1,264 @@
+openapi: 3.1.0
+tags:
+  - Endpoints
+x-stoplight:
+  id: l4dzydfnfcazh
+info:
+  title: Customer
+  version: '1.0'
+  description: 'Retrieve, add, update, or delete details for a customer.'
+  contact:
+    name: Support
+    email: Support@someserver.com
+    url: someserver.com
+  termsOfService: 'https://someserver.org/terms'
+  license:
+    name: Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+    url: 'https://creativecommons.org/licenses/by-sa/4.0/'
+  summary: This API is used for retrieving and managing customer details.
+servers:
+  - url: 'http://localhost'
+paths:
+  /customer:
+    parameters: []
+    get:
+      summary: Get Customer
+      responses:
+        '200':
+          $ref: '#/components/responses/customerId'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorised
+        '404':
+          $ref: '#/components/responses/customerId'
+        '500':
+          description: Internal Server Error
+      operationId: get-customer
+      description: Retrieve the information of the customer with the matching customerId.
+      x-stoplight:
+        id: ynmipuvrn0p9s
+      parameters:
+        - $ref: '#/components/parameters/apiKey'
+        - $ref: '#/components/parameters/customerId'
+      tags:
+         - Endpoints
+    patch:
+      summary: Update Customer
+      operationId: patch-customer
+      responses:
+        '200':
+          $ref: '#/components/responses/customerId'
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '404':
+          description: Customer Not Found
+        '500':
+          description: Internal Server Error
+      description: Update the information of an existing customer.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+        description: The new customer details
+      x-stoplight:
+        id: nje3vbamljyvh
+      security:
+        - apiKey: []
+      parameters:
+        - $ref: '#/components/parameters/apiKey'
+        - $ref: '#/components/parameters/customerId'
+      tags:
+        - Endpoints
+    delete:
+      summary: Delete Customer
+      tags:
+        - Endpoints
+      responses:
+        '200':
+          $ref: '#/components/responses/customerId'
+        '400':
+          $ref: '#/components/responses/customerId'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: delete-customer
+      x-stoplight:
+        id: vgxz0uvj8ivu4
+      description: Remove the specified customer details
+      security:
+        - apiKey: []
+      parameters:
+        - $ref: '#/components/parameters/apiKey'
+        - $ref: '#/components/parameters/customerId'
+      requestBody:
+        content: {}
+components:
+  schemas:
+    Customer:
+      title: Customer
+      x-stoplight:
+        id: yays8dgk20k7k
+      type: object
+      examples:
+        - firstName: string
+          lastName: string
+          email: hello@gmail.com
+          '':
+            id: 5
+            apartmentNumber: '100'
+            streetNumber: '45'
+            street: Letsby Avenue
+            city: Paris
+            county: Buckinghamshire
+            country: UK
+            postcode: XY1 2DY
+            buildingName: The Shed
+          dateRegistered: string
+          customerId: string
+      description: The full details of a customer
+      properties:
+        firstName:
+          type: string
+          x-stoplight:
+            id: 7340a48rc8ltu
+          example: Joris
+          description: The first name of the customer
+        lastName:
+          type: string
+          x-stoplight:
+            id: mfs4aidm3euee
+          example: Bohnson
+          description: The last name of the customer
+        email:
+          type: string
+          x-stoplight:
+            id: i50icz7y4prb7
+          format: email
+          example: hello@gmail.com
+          description: The email address of the customer
+        '':
+          $ref: '#/components/schemas/Address'
+          x-stoplight:
+            id: ifmwdmfv8vw1h
+          description: The full address details of the customer
+        dateRegistered:
+          type: string
+          x-stoplight:
+            id: gykhsi4th9y5t
+          description: The date the customer first registered
+        customerId:
+          type: string
+          x-stoplight:
+            id: gc231orbmckll
+          description: The unique Id of the customer. Note this is assigned by the system.
+    Address:
+      title: Address
+      x-stoplight:
+        id: k6z053zxep7vy
+      type: object
+      description: Full address details
+      required:
+        - id
+        - postcode
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: zzvyy8hi0h3hm
+          default: 1
+          description: The unique id of the record
+          minimum: 1
+          maximum: 31
+          example: 5
+        apartmentNumber:
+          type: string
+          x-stoplight:
+            id: r73eisv8e39gj
+          example: '100'
+          description: Apartment number
+          minLength: 1
+          maxLength: 5
+        streetNumber:
+          type: string
+          x-stoplight:
+            id: e876esjvk217s
+          example: '45'
+          description: Street number
+          minLength: 1
+          maxLength: 5
+        street:
+          type: string
+          x-stoplight:
+            id: tmptu3n6dalx9
+          example: Letsby Avenue
+          maxLength: 15
+        city:
+          type: string
+          x-stoplight:
+            id: u3k9mryb69i57
+          example: Paris
+        county:
+          type: string
+          x-stoplight:
+            id: zyjz1jfsf8026
+          example: Buckinghamshire
+        country:
+          x-stoplight:
+            id: zm1u3awjziz8r
+          example: UK
+          default: UK
+          enum:
+            - UK
+            - FR
+            - D
+          description: Country code in ISO format.
+        postcode:
+          type: string
+          x-stoplight:
+            id: 74exp1iideisu
+          default: XY1 2DY
+          example: XY1 2DY
+          description: Postcode in UK format
+        buildingName:
+          type: string
+          x-stoplight:
+            id: 89y6bxugpgnvu
+          example: The Shed
+          default: The Shed
+          maxLength: 15
+  securitySchemes:
+    apiKey:
+      name: apiKey
+      type: apiKey
+      in: header
+  responses:
+    customerId:
+      description: Customer details
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Customer'
+  parameters:
+    customerId:
+      name: customerId
+      in: query
+      required: false
+      schema:
+        type: string
+      description: The unique Id of the customer
+    apiKey:
+      name: apiKey
+      in: header
+      required: false
+      schema:
+        type: string
+      description: The unique key used to authorise api access
+security:
+  - apiKey: []
